@@ -13,13 +13,11 @@ type Employee struct {
 
 func getEmployees(count int) []Employee {
 	ppl := []string{"Vader", "Luke", "Leia", "Han", "Palpatine", "Chewie", "C3PO"}
-	var employees = []Employee{}
-	for i := 0;i < count;i++ {
-		name := ppl[i]
-		employee := Employee{
+	var employees = make([]Employee, len(ppl))
+	for idx, name := range(ppl) {
+		employees[idx] = Employee{
 			name:name,
 		}
-		employees = append(employees, employee)
 	}
 	return employees
 }
