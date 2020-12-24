@@ -8,8 +8,7 @@ import (
 
 type Employee struct {
 	name string
-	skip bool
-	secretSanta int
+	secretSanta string
 }
 
 func getEmployees(count int) []Employee {
@@ -25,45 +24,44 @@ func getEmployees(count int) []Employee {
 	return employees
 }
 
-
-func selectSecretSanta(employees []Employee) int {
-	foundIdx := 0
-	for {
-		idx := rand.Intn(len(employees))
-		employee := employees[idx]
-		if employee.skip {
-			continue
-		}
-		foundIdx = idx
-		break
+func shuffleEmployees(employees []Employee) {
+	for i := 0;i < len(employees);i++ {
+		tmp := employees[i]
+		j := rand.Intn(len(employees))
+		employees[i] = employees[j]
+		employees[j] = tmp
 	}
-	return foundIdx
 }
 
-func selectSecretSantas() {
+func selectSecretSantas(employees []Employee) {
+	if len (employees) < 2 {
+		return
+	}
 	for idx, _ := range(employees) {
-		employee := &employees[idx]
-		employee.skip = true
-		secretSanta := selectSecretSanta(employees)
-		employee.secretSanta = secretSanta
-		employee.skip = false
+		if idx < len(employees) - 1 {
+			employees[idx].secretSanta = employees[idx+1].name
+		} else {
+			employees[idx].secretSanta = employees[idx-1].name
+		}
 	}
 
-	fmt.Printf("[")
-	for idx, employee := range(employees) {
-		secretSanta := employee.secretSanta
-		secretSantaName := employees[secretSanta].name
-		fmt.Printf("('%s', '%s')", employee.name, secretSantaName)
-		if idx < len(employees) - 1 {
-			fmt.Printf(", ")
-		} 
-	}
-	fmt.Printf("]")
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	employees := getEmployees(7)
+	shuffleEmployees(employees)
+	selectSecretSantas(employees)
+
+	fmt.Printf("[")
+	for idx, employee := range(employees) {
+		secretSanta := employee.secretSanta
+		fmt.Printf("('%s', '%s')", employee.name, secretSanta)
+		if idx < len(employees) - 1 {
+			fmt.Printf(", ")
+		} 
+	}
+	fmt.Printf("]\n")
 }
 
 
