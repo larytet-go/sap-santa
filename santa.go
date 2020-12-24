@@ -1,12 +1,3 @@
-'''
-You get a list of employees. Create a mapping where each employee is another employees secret santa. 
-The mapping should be random on each run of the algorithm. An employee cannot be its own secret santa 
-and should not be able to guess its santa knowing the algorithm (i.e. (“Luke”, “Vader”) should not infer (“Vader”, “Luke”))
-ppl = ["Vader", "Luke", "Leia", "Han", "Palpatine", "Chewie", "C3PO"]
-# example result
-result = [('Leia', 'Chewie'), ('Vader', 'Palpatine'), ('Palpatine', 'Leia'), ...]
-'''
-
 package main
 
 import (
@@ -21,7 +12,7 @@ type Employee struct {
 }
 
 func getEmployes(count int) []Employee {
-	var employees = []Employe{}
+	var employees = []Employee{}
 	for i := 0;i < count;i++ {
 		name := fmt.Sprintf("%s", i)
 		employees = append(employees, Employee{name:name})
@@ -30,7 +21,7 @@ func getEmployes(count int) []Employee {
 }
 
 
-func selectSecretSanta(employees []Employee)  {
+func selectSecretSanta(employees []Employee) int {
 	foundIdx := 0
 	for {
 		idx := rand.Intn(len(employees))
