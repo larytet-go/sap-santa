@@ -43,12 +43,7 @@ func selectSecretSantas(employees []Employee) {
 
 }
 
-func main() {
-	rand.Seed(time.Now().UnixNano())
-	employees := getEmployees()
-	shuffleEmployees(employees)
-	selectSecretSantas(employees)
-
+func printEmployees(employees []Employee) {
 	fmt.Printf("[")
 	for idx, employee := range(employees) {
 		secretSanta := employee.secretSanta
@@ -58,6 +53,14 @@ func main() {
 		} 
 	}
 	fmt.Printf("]\n")
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+	employees := getEmployees()
+	shuffleEmployees(employees)
+	selectSecretSantas(employees)
+	printEmployees(employees)
 }
 
 
