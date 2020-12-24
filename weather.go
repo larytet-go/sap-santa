@@ -3,26 +3,36 @@ package main
 import (
 	"fmt"
 	"time"
-	"math/rand"
+	"http"
+	"encoding/json"
 )
 
-type Employee struct {
-	name string
-	skip bool
-	secretSanta int
+type Location struct {
+	Title        string `json:"title"`
+	LocationType string `json:"location_type"`
+	Woeid        int    `json:"woeid"`
+	LattLong     string `json:"latt_long"`
 }
 
-func getEmployees(count int) []Employee {
-	ppl := []string{"Vader", "Luke", "Leia", "Han", "Palpatine", "Chewie", "C3PO"}
-	var employees = []Employee{}
-	for i := 0;i < count;i++ {
-		name := ppl[i]
-		employee := Employee{
-			name:name,
-		}
-		employees = append(employees, employee)
+// Do something like this
+// curl https://www.metaweather.com/api/location/search/?query=berlin
+// cache goes here if needed
+func getLocation(name string) (int, error) {
+	query := fmt.Sprintf("https://www.metaweather.com/api/location/search/?query=%s", name)
+	resp, errGet := http.Get(query)
+	if errGet != nil {
+		return 0, errGet
 	}
-	return employees
+	defer resp.Body.Close()
+	body, errBody := ioutil.ReadAll(resp.Body)
+	if errBody != nil {
+		return 0, errBody
+	}
+	locations := []Location{}
+	errJson := json.Unmarshall(body, &locations)
+	// I feel lucky!
+	locaton := locations[0].Woeid
+	return locaton, errJson
 }
 
 
