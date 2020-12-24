@@ -15,7 +15,10 @@ func getEmployes(count int) []Employee {
 	var employees = []Employee{}
 	for i := 0;i < count;i++ {
 		name := fmt.Sprintf("%s", i)
-		employees = append(employees, Employee{name:name})
+		employee := Employee{
+			name:name,
+		}
+		employees = append(employees, employee)
 	}
 	return employees
 }
@@ -30,6 +33,7 @@ func selectSecretSanta(employees []Employee) int {
 			continue
 		}
 		foundIdx = idx
+		break
 	}
 	return foundIdx
 }
