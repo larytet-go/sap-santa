@@ -36,10 +36,10 @@ func selectSecretSanta(employees []Employee) int {
 func main() {
 	rand.Seed(0) // cutting corners, use tick instead
 	employees := getEmployes(7)
-	for idx, employee := range(employees) {
-		employees[idx].skip = true
-		employees[idx].secretSanta = selectSecretSanta(employees)
-		employees[idx].skip = false
+	for _, employee := range(employees) {
+		employee.skip = true
+		employee.secretSanta = selectSecretSanta(employees)
+		employee.skip = false
 	}
 
 	fmt.Printf("%v\n", employees)
