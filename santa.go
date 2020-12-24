@@ -35,14 +35,17 @@ func selectSecretSanta(employees []Employee) int {
 		foundIdx = idx
 		break
 	}
+	fmt.Printf("foundIdx=%d\n", foundIdx)
 	return foundIdx
 }
 func main() {
 	rand.Seed(0) // cutting corners, use tick instead
 	employees := getEmployes(7)
-	for _, employee := range(employees) {
+	for idx, _ := range(employees) {
+		employee := &employees[idx]
 		employee.skip = true
-		employee.secretSanta = selectSecretSanta(employees)
+		secretSanta := selectSecretSanta(employees)
+		employee.secretSanta = secretSanta
 		employee.skip = false
 	}
 
