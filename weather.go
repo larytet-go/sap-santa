@@ -115,7 +115,7 @@ func main() {
 		fmt.Printf("%v", err)
 		os.Exit(-1)
 	}
-	cleanDay, errGetDay := getCleanDay(5)
+	cleanDay, errGetDay := getCleanDay(5, location)
 	if errGetDay != nil {
 		fmt.Printf("%v", errGetDay)
 		os.Exit(-2)
