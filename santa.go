@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 	"math/rand"
 )
 
@@ -12,9 +13,10 @@ type Employee struct {
 }
 
 func getEmployes(count int) []Employee {
+	ppl := []string{"Vader", "Luke", "Leia", "Han", "Palpatine", "Chewie", "C3PO"}
 	var employees = []Employee{}
 	for i := 0;i < count;i++ {
-		name := fmt.Sprintf("%v", i)
+		name := ppl[i]
 		employee := Employee{
 			name:name,
 		}
@@ -35,11 +37,10 @@ func selectSecretSanta(employees []Employee) int {
 		foundIdx = idx
 		break
 	}
-	fmt.Printf("foundIdx=%d\n", foundIdx)
 	return foundIdx
 }
 func main() {
-	rand.Seed(0) // cutting corners, use tick instead
+	rand.Seed(time.Now().UnixNano())
 	employees := getEmployes(7)
 	for idx, _ := range(employees) {
 		employee := &employees[idx]
@@ -49,9 +50,16 @@ func main() {
 		employee.skip = false
 	}
 
+	fmt.Printf("[")
 	for idx, employee := range(employees) {
-		fmt.Printf("%d %s %d\n", idx, employee.name, employee.secretSanta)
+		secretSanta := employee.secretSanta
+		secretSantaName := employees[secretSanta].name
+		fmt.Printf("('%s', '%s')", employee.name, secretSantaName)
+		if idx < len(employees) - 1 {
+			fmt.Printf(", ")
+		} 
 	}
+	fmt.Printf("]")
 }
 
 
