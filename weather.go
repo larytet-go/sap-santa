@@ -83,7 +83,6 @@ func getCleanDay(days int, location int) (time.Time, error) {
 	dateToCheck := time.Now()
 	year, month, day := dateToCheck.Date()
 	query := fmt.Sprintf("https://www.metaweather.com//api/location/%d/%d/%d/%d/", location, year, month, day)
-	dateToCheck := dateToCheck.Add(24*time.Hour)
 	resp, errGet := http.Get(query)
 	if errGet != nil {
 		return dateToCheck, errGet
