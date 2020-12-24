@@ -24,10 +24,8 @@ func getEmployees(count int) []Employee {
 
 func shuffleEmployees(employees []Employee) {
 	for i := 0;i < len(employees);i++ {
-		tmp := employees[i]
 		j := rand.Intn(len(employees))
-		employees[i] = employees[j]
-		employees[j] = tmp
+		employees[i], employees[j] = employees[j], employees[i]
 	}
 }
 
