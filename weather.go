@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"time"
-	"http"
+	"io/ioutil"
+	"net/http"
 	"encoding/json"
+	"log"
 	"strings"
 )
 
@@ -107,13 +109,13 @@ func getCleanDay(days int, location int) (time.Time, error) {
 func main() {
 	location, err := getLocation("Berlin")
 	if err != nil {
-		fmt.Fatalf("%v", err)
+		log.Fatalf("%v", err)
 	}
 	cleanDay, errGetDay := getCleanDay()
 	if errGetDay != nil {
-		fmt.Fatalf("%v", errGetDay)
+		log.Fatalf("%v", errGetDay)
 	}
-	fmt.Printf("%v", cleanDay)
+	log.Infof("%v", cleanDay)
 }
 
 
