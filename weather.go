@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"encoding/json"
+	"os"
 	"strings"
 )
 
@@ -112,12 +113,12 @@ func main() {
 	location, err := getLocation("Berlin")
 	if err != nil {
 		fmt.Printf("%v", err)
-		exit(-1)
+		os.Exit(-1)
 	}
 	cleanDay, errGetDay := getCleanDay(5)
 	if errGetDay != nil {
 		fmt.Printf("%v", errGetDay)
-		exit(-2)
+		os.Exit(-2)
 	}
 	fmt.Printf("%v", cleanDay)
 }
