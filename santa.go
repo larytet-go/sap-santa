@@ -14,7 +14,7 @@ type Employee struct {
 func getEmployes(count int) []Employee {
 	var employees = []Employee{}
 	for i := 0;i < count;i++ {
-		name := fmt.Sprintf("%s", i)
+		name := fmt.Sprintf("%v", i)
 		employee := Employee{
 			name:name,
 		}
@@ -49,7 +49,9 @@ func main() {
 		employee.skip = false
 	}
 
-	fmt.Printf("%v\n", employees)
+	for idx, employee := range(employees) {
+		fmt.Printf("%d %s %d\n", idx, employee.name, employee.secretSanta)
+	}
 }
 
 
