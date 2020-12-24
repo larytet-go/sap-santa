@@ -53,7 +53,11 @@ func getLocation(name string) (int, error) {
 	locations := []Location{}
 	errJson := json.Unmarshal(body, &locations)
 	// I feel lucky!
+	if len(locations) < 1 {
+		return 0, fmt.Errorf("no location %s", name)
+	}
 	locaton := locations[0].Woeid
+	fmt.Printf("%v\n", locations[0])
 	return locaton, errJson
 }
 
@@ -79,10 +83,18 @@ func getCleanDay(days int, location int) (time.Time, error) {
 	if days > 6 {
 		days = 6
 	}
+
+	for i := 0;i < days;i++ {
+		dayWeather := weather[i]
+		fmt.Printf("weather %v\n", dayWeather.WeatherStateName)
+	}
+
 	for i := 0;i < days;i++ {
 		dayWeather := weather[i]
 		if strings.Contains(dayWeather.WeatherStateName, "Clear") {
 			return dateToCheck, nil
+		} else {
+			fmt.Printf("weather %v\n", dayWeather.WeatherStateName)
 		}
 		dateToCheck = dateToCheck.Add(24*time.Hour)
 	}
@@ -90,7 +102,7 @@ func getCleanDay(days int, location int) (time.Time, error) {
 }
 
 func main() {
-	location, err := getLocation("Berlin")
+	location, err := getLocation("Perth")
 	if err != nil {
 		fmt.Printf("%v", err)
 		os.Exit(-1)
