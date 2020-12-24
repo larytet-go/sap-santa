@@ -72,7 +72,7 @@ func getLocation(name string) (int, error) {
 		return 0, errBody
 	}
 	locations := []Location{}
-	errJson := json.Unmarshall(body, &locations)
+	errJson := json.Unmarshal(body, &locations)
 	// I feel lucky!
 	locaton := locations[0].Woeid
 	return locaton, errJson
@@ -95,7 +95,7 @@ func getCleanDay(days int, location int) (time.Time, error) {
 			return dateToCheck, errBody
 		}
 		weather := Weather{}
-		errJson := json.Unmarshall(body, &weather)
+		errJson := json.Unmarshal(body, &weather)
 		if errJson != nil {
 			return dateToCheck, errJson
 		}
