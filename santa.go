@@ -11,7 +11,7 @@ type Employee struct {
 	secretSanta string
 }
 
-func getEmployees(count int) []Employee {
+func getEmployees() []Employee {
 	ppl := []string{"Vader", "Luke", "Leia", "Han", "Palpatine", "Chewie", "C3PO"}
 	var employees = make([]Employee, len(ppl))
 	for idx, name := range(ppl) {
@@ -45,7 +45,7 @@ func selectSecretSantas(employees []Employee) {
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	employees := getEmployees(7)
+	employees := getEmployees()
 	shuffleEmployees(employees)
 	selectSecretSantas(employees)
 
