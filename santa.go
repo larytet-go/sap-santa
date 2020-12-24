@@ -11,21 +11,47 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 )
 
+type Employee struct {
+	name string
+	skip bool
+	secretSanta int
+}
 
-func getEmployes() []string {
-	var employees = []string{}
-	for (i := 0;i < 7;;i++ {
+func getEmployes(count int) []Employee {
+	var employees = []Employe{}
+	for i := 0;i < count;i++ {
 		name := fmt.Sprintf("%s", i)
-		employees = append(employees, name)
-		}
+		employees = append(employees, Employee{name:name})
+	}
 	return employees
 }
 
 
-func selectSecrectSanta
+func selectSecretSanta(employees []Employee)  {
+	foundIdx := 0
+	for {
+		idx := rand.Intn(len(employees))
+		employee := employees[idx]
+		if employee.skip {
+			continue
+		}
+		foundIdx = idx
+	}
+	return foundIdx
+}
 func main() {
+	rand.Seed(0) // cutting corners, use tick instead
+	employees := getEmployes(7)
+	for idx, employee := range(employees) {
+		employees[idx].skip = true
+		employees[idx].secretSanta = selectSecretSanta(employees)
+		employees[idx].skip = false
+	}
+
+	fmt.Printf("%v\n", employees)
 }
 
 
