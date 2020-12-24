@@ -81,25 +81,29 @@ func getLocation(name string) (int, error) {
 // Something like curl https://www.metaweather.com//api/location/638242/2013/4/27/
 func getCleanDay(days int, location int) (time.Time, error) {
 	dateToCheck := time.Now()
+	year, month, day := dateToCheck.Date()
+	query := fmt.Sprintf("https://www.metaweather.com//api/location/%d/%d/%d/%d/", location, year, month, day)
+	dateToCheck := dateToCheck.Add(24*time.Hour)
+	resp, errGet := http.Get(query)
+	if errGet != nil {
+		return dateToCheck, errGet
+	}
+	defer resp.Body.Close()
+	body, errBody := ioutil.ReadAll(resp.Body)
+	if errBody != nil {
+		return dateToCheck, errBody
+	}
+	weather := Weather{}
+	errJson := json.Unmarshal(body, &weather)
+	if errJson != nil {
+		return dateToCheck, errJson
+	}
+	if days > 6 {
+		days = 6
+	}
 	for i := 0;i < days;i++ {
-		year, month, day := dateToCheck.Date()
-		query := fmt.Sprintf("https://www.metaweather.com//api/location/%d/%d/%d/%d/", location, year, month, day)
-		dateToCheck := dateToCheck.Add(24*time.Hour)
-		resp, errGet := http.Get(query)
-		if errGet != nil {
-			return dateToCheck, errGet
-		}
-		defer resp.Body.Close()
-		body, errBody := ioutil.ReadAll(resp.Body)
-		if errBody != nil {
-			return dateToCheck, errBody
-		}
-		weather := Weather{}
-		errJson := json.Unmarshal(body, &weather)
-		if errJson != nil {
-			return dateToCheck, errJson
-		}
-		if strings.Contains(weather.ConsolidatedWeather.WeatherStateName, "Clear") {
+		consolidatedWeather := weather.ConsolidatedWeather[i]
+		if strings.Contains(consolidatedWeather.WeatherStateName, "Clear") {
 			return dateToCheck, nill
 		}
 	}
