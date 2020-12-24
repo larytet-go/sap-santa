@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"encoding/json"
-	"log"
 	"strings"
 )
 
@@ -103,7 +102,7 @@ func getCleanDay(days int, location int) (time.Time, error) {
 	for i := 0;i < days;i++ {
 		consolidatedWeather := weather.ConsolidatedWeather[i]
 		if strings.Contains(consolidatedWeather.WeatherStateName, "Clear") {
-			return dateToCheck, nill
+			return dateToCheck, nil
 		}
 	}
 	return dateToCheck, fmt.Errorf("No clean day in the next %d days", days)
@@ -112,13 +111,15 @@ func getCleanDay(days int, location int) (time.Time, error) {
 func main() {
 	location, err := getLocation("Berlin")
 	if err != nil {
-		log.Fatalf("%v", err)
+		fmt.Printf("%v", err)
+		exit(-1)
 	}
-	cleanDay, errGetDay := getCleanDay()
+	cleanDay, errGetDay := getCleanDay(5)
 	if errGetDay != nil {
-		log.Fatalf("%v", errGetDay)
+		fmt.Printf("%v", errGetDay)
+		exit(-2)
 	}
-	log.Infof("%v", cleanDay)
+	fmt.Printf("%v", cleanDay)
 }
 
 
