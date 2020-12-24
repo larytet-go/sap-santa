@@ -17,46 +17,25 @@ type Location struct {
 	LattLong     string `json:"latt_long"`
 }
 
+
 type Weather struct {
-	ConsolidatedWeather []struct {
-		ID                   int64     `json:"id"`
-		WeatherStateName     string    `json:"weather_state_name"`
-		WeatherStateAbbr     string    `json:"weather_state_abbr"`
-		WindDirectionCompass string    `json:"wind_direction_compass"`
-		Created              time.Time `json:"created"`
-		ApplicableDate       string    `json:"applicable_date"`
-		MinTemp              float64   `json:"min_temp"`
-		MaxTemp              float64   `json:"max_temp"`
-		TheTemp              float64   `json:"the_temp"`
-		WindSpeed            float64   `json:"wind_speed"`
-		WindDirection        float64   `json:"wind_direction"`
-		AirPressure          float64   `json:"air_pressure"`
-		Humidity             int       `json:"humidity"`
-		Visibility           float64   `json:"visibility"`
-		Predictability       int       `json:"predictability"`
-	} `json:"consolidated_weather"`
-	Time         time.Time `json:"time"`
-	SunRise      time.Time `json:"sun_rise"`
-	SunSet       time.Time `json:"sun_set"`
-	TimezoneName string    `json:"timezone_name"`
-	Parent       struct {
-		Title        string `json:"title"`
-		LocationType string `json:"location_type"`
-		Woeid        int    `json:"woeid"`
-		LattLong     string `json:"latt_long"`
-	} `json:"parent"`
-	Sources []struct {
-		Title     string `json:"title"`
-		Slug      string `json:"slug"`
-		URL       string `json:"url"`
-		CrawlRate int    `json:"crawl_rate"`
-	} `json:"sources"`
-	Title        string `json:"title"`
-	LocationType string `json:"location_type"`
-	Woeid        int    `json:"woeid"`
-	LattLong     string `json:"latt_long"`
-	Timezone     string `json:"timezone"`
+	ID                   int64     `json:"id"`
+	WeatherStateName     string    `json:"weather_state_name"`
+	WeatherStateAbbr     string    `json:"weather_state_abbr"`
+	WindDirectionCompass string    `json:"wind_direction_compass"`
+	Created              time.Time `json:"created"`
+	ApplicableDate       string    `json:"applicable_date"`
+	MinTemp              float64   `json:"min_temp"`
+	MaxTemp              float64   `json:"max_temp"`
+	TheTemp              float64   `json:"the_temp"`
+	WindSpeed            float64   `json:"wind_speed"`
+	WindDirection        float64   `json:"wind_direction"`
+	AirPressure          float64   `json:"air_pressure"`
+	Humidity             int       `json:"humidity"`
+	Visibility           float64   `json:"visibility"`
+	Predictability       int       `json:"predictability"`
 }
+
 // Do something like this
 // curl https://www.metaweather.com/api/location/search/?query=berlin
 // cache goes here if needed
@@ -92,19 +71,20 @@ func getCleanDay(days int, location int) (time.Time, error) {
 	if errBody != nil {
 		return dateToCheck, errBody
 	}
-	weather := Weather{}
+	weather := []Weather{}
 	errJson := json.Unmarshal(body, &weather)
 	if errJson != nil {
-		return dateToCheck, errJson
+		return dateToCheck, fmt.Errorf("%v %s", errJson, string(body))
 	}
 	if days > 6 {
 		days = 6
 	}
 	for i := 0;i < days;i++ {
-		consolidatedWeather := weather.ConsolidatedWeather[i]
-		if strings.Contains(consolidatedWeather.WeatherStateName, "Clear") {
+		dayWeather := weather[i]
+		if strings.Contains(dayWeather.WeatherStateName, "Clear") {
 			return dateToCheck, nil
 		}
+		dateToCheck = dateToCheck.Add(24*time.Hour)
 	}
 	return dateToCheck, fmt.Errorf("No clean day in the next %d days", days)
 }
